@@ -9,8 +9,8 @@ import reactor.core.publisher.Mono;
 @Component
 @Order(-2)
 public class ExceptionHandler implements WebExceptionHandler {
-    @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-        return null;
-    }
+  @Override
+  public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+    return null;
+  }
 }
