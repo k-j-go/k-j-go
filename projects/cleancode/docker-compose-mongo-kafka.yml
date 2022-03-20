@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+  kafka:
+    build:
+      context: kafka
+      dockerfile: Dockerfile
+    ports:
+      - 9092:9092
+    networks:
+      - dc1ring
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - dc1ring
+
+networks:
+  dc1ring:
+
+volumes:
+  mongodb_data_container:
+  data:
