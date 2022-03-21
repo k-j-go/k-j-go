@@ -1,0 +1,26 @@
+server:
+  port: 8088
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: neo_route
+          uri: http://127.0.0.1:8080
+          predicates:
+            - Path=/users
+            - name: GoldenCustomer
+              args:
+                golden: true
+                customerId: x-customerId
+            - name: MyMethod
+              args:
+                myMethod: GET
+          filters:
+            - RewritePath=/service(?<segment>/?.*), $\{segment}
+            - name: Logging
+              args:
+                baseMessage: My Custom Message
+                preLogger: true
+                postLogger: true
+golden:
+  url: http://127.0.0.1:8000

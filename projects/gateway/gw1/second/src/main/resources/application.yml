@@ -1,0 +1,36 @@
+server:
+  port: 8080
+spring:
+  data:
+    mongodb:
+      database: first
+      port: 27017
+  mongodb:
+    embedded:
+      version: 5.0.5
+
+  cloud:
+    gateway:
+      routes:
+        - id: neo_route
+          uri: http://127.0.0.1:3000
+          predicates:
+            - Path=/posts
+            - name: GoldenCustomer
+              args:
+                golden: true
+                customerId: x-customerId
+            - name: MyMethod
+              args:
+                myMethod: GET
+          filters:
+            - RewritePath=/service(?<segment>/?.*), $\{segment}
+            - name: Logging
+              args:
+                baseMessage: My Custom Message
+                preLogger: true
+                postLogger: true
+            - name: ModifyResponse
+
+golden:
+  url: http://127.0.0.1:3000

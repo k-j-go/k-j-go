@@ -1,8 +1,8 @@
 package com.azunitech.rx.rxtwo;
 
-
-import com.azunitech.rx.rxtwo.model.User;
-import com.azunitech.rx.rxtwo.repositories.UserRepository;
+import com.azunitech.rx.rxtwo.persistent.model.ProductDocument;
+import com.azunitech.rx.rxtwo.persistent.repository.UserRepository;
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,22 +14,21 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserControllerIT {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @BeforeAll
-    public void setup(){
+  private String name;
 
-        userRepository.save(User.builder().id(1L).firstName("James").lastName("Bond").build());
-        userRepository.save(User.builder().id(2L).firstName("James").lastName("Farley").build());
-        userRepository.save(User.builder().id(3L).firstName("Marley").lastName("Hemp").build());
-        userRepository.save(User.builder().id(4L).firstName("James").lastName("Bond").build());
+  @BeforeAll
+  public void setup() {
 
-    }
+    Faker faker = new Faker();
+    ProductDocument product =
+        userRepository.save(ProductDocument.builder().id("1").name("James").build());
+    name = product.getName();
+  }
 
-    @Test
-    public void test_getById_successfull() throws Exception {
-        Assertions.assertEquals("James", userRepository.findByFirstName("James").get(0).getFirstName());
-    }
-
+  @Test
+  public void test_getById_successfull() throws Exception {
+    Assertions.assertEquals("James", userRepository.findByName(name).get(0).getName());
+  }
 }
